@@ -13,7 +13,7 @@ from bitfun import ByteTracker, to_bytes, from_bytes, log, wipe_bytes, ABA
 from crypto import run_argon, get_prime, get_random, decrypt_data, encrypt_data
 
 from sd.common import sround, randexp, plural, fmt_time, error, rns
-from sd.common import roundint, percent, query, warn, randint, DotDict, chunker, undent
+from sd.common import roundint, percent, warn, randint, DotDict, chunker, undent
 
 
 class KeyLocker:
@@ -575,13 +575,13 @@ class KeyLocker:
 		# dprint("Failure after", plural(tries + 1, "try"), 'in', fmt_time(time.perf_counter() - start_time))
 		return None
 
-	def wipe(reps=3):
+	def wipe(self, reps=3):
 		'''Destroy the data file. No guarantee of success on an SSD,
 		but with the design of the data file, if we manage to corrupt
 		even a few bytes in the SALT or key area, then the whole thing
 		is rendered useless.
 		'''
-		if 'w' not in file.mode and '+' not in file.mode:
+		if 'w' not in self.file.mode and '+' not in self.file.mode:
 			warn("Cannot wipe file in read mode")
 			return
 
@@ -621,7 +621,7 @@ def quick(max_t=2):
 		size = randint(2**exp, 2**(exp + 1))
 		file = io.BytesIO(os.urandom(int(size)))
 		phash = os.urandom(4096)
-		ds = KeyLocker(file, phash, size=size, testing=True, batch_mode=True)
+		ds = KeyLocker(file, phash, testing=True, batch_mode=True)
 		text = secrets.token_bytes(randint(5, 105))
 		ds.write_slot(text)
 

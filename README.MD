@@ -29,7 +29,7 @@ However, uncovering one key tells you nothing about how many more keys are store
 
 #### Program Notes:
 
-  * No binary blob - You don’t have to trust an opaque machine code executable, because there is none. The source code is 100% written in python so you can easily read and understand every step of how it works. This is why the second line disables the .pyc files.
+  * No binary blob - You don’t have to trust an opaque machine code executable, because there is none. The source code is 100% written in python so you can easily read and understand every step of how it works. This is why the second line disables the automatic bytecode (.pyc) file generation.
   * Open Source – The code for this project will always be 100% open so anyone can read and contribute to it.
 
 
@@ -110,7 +110,7 @@ Let me know if you would like to see a GUI version or any additional features re
 ### Todo:
 
  - [ ] GUI Interface
- - [ ] GPT compatibility
+ - [ ] GPT Compatibility
  - [ ] Data storage area inside larger KeyFiles
  - [ ] Make it work with LUKS devices.
  - [ ] Windows Compatibility
