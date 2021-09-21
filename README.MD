@@ -103,6 +103,42 @@ Warning: No GPT compatability yet, so don’t try this on GPT disks!
 
 ----
 
+# Installation:
+
+To install pip and required python tools:
+
+
+```
+	sudo apt update
+	sudo apt install python3-distutils python3-setuptools python3-dev gcc
+	pip3 --version || sudo python3 -m easy_install install pip
+
+```
+
+The following pip modules are required for use:
+
+  * [Readchar](https://pypi.org/project/readchar/) - For password entry
+  * [Argon2](https://pypi.org/project/argon2/) - For memory intensive password hashing
+  * [Psutil](https://pypi.org/project/psutil/) - To get system memory stats
+  * [Crypto](https://pypi.org/project/crypto/) - To do the [AES encryption](https://en.wikipedia.org/wiki/Advanced_Encryption_Standard)
+  * [Xlib](https://pypi.org/project/xlib/) - To find the mouse pointer for hash_mouse.py (optional)
+
+You can get them by running `pip` like so:
+
+```
+	sudo python3 -m pip install setuptools argon2 readchar xlib psutil pycrypto
+```
+
+# Usage:
+
+```
+	./keylocker.py <keyfile> <device_name> --options...
+
+```
+
+Get detailed help with: `./keylocker.py -h`
+
+
 # Contribution:
 
 Let me know if you would like to see a GUI version or any additional features requests! If anyone want to contribute to a working Windows version, feel free to join the project.

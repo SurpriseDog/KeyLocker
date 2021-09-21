@@ -10,7 +10,7 @@ from importlib.util import find_spec
 from sd.common import rfs, warn, undent
 
 # Check for required packages.
-# Not in main because otherwise package import errors would yield this unreachable.
+# Not in main because otherwise package import errors would yield this unreachable
 # todo add instructions tested on more distros
 if not all([find_spec(modname) for modname in ['readchar', 'argon2', 'psutil', 'Crypto']]):
 	warn('Missing required python modules')
