@@ -25,7 +25,7 @@ However, uncovering one key tells you nothing about how many more keys are store
   * Hidden KeyFile - Store the KeyFile in the slack space between partitions or use a normal file.
   * Store multiple text segments securely. Use it as a password manager or whatever you wish. For example you could copy paste the domain name after typing in your password to retrieve a seperate unique password for each website.
   * Random KeyFile – There’s no way to prove that the KeyFile is truly a KeyLocker generated file or just random noise.
-  * Built in [salt](https://en.wikipedia.org/wiki/Salt_(cryptography) area at the beginning and end of each KeyFile. - SSDs don’t always delete every sector even if you try to directly overwrite the file. By hashing the SALT in with the password, it increases the chances that a deleted KeyFile will be truly irrecoverable. 
+  * Built in [salt](https://en.wikipedia.org/wiki/Salt_(cryptography)) area at the beginning and end of each KeyFile. - SSDs don’t always delete every sector even if you try to directly overwrite the file. By hashing the SALT in with the password, it increases the chances that a deleted KeyFile will be truly irrecoverable. 
 
 #### Program Notes:
 
@@ -88,7 +88,7 @@ Let's say you have to free space at the end of the drive `/dev/sda` that you wis
 
 which will create a hidden partition starting at 1 megabyte after the end of /dev/sdb1 and ending 1 megabyte before the end of the drive.
 
-### Hiding the KeyFile
+### Hiding the KeyFiley
 
 Finally to hide the KeyFile itself, you can embed it within the MBR partition table like so:
 
@@ -111,7 +111,7 @@ Let me know if you would like to see a GUI version or any additional features re
 
  - [ ] GUI Interface
  - [ ] GPT compatibility
- - [ ] Data storage are inside larger KeyFiles
+ - [ ] Data storage area inside larger KeyFiles
  - [ ] Make it work with LUKS devices.
  - [ ] Windows Compatibility
 
