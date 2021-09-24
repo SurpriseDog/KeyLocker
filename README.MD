@@ -96,7 +96,7 @@ Finally to hide the KeyFile itself, you can embed it within the MBR partition ta
   sudo ./keylocker.py /dev/sdb /dev/sdb --create='/dev/sdb1+1M -1M'
 ```
 
-which will use sectors: 128 to 2047 for the KeyFile and put a hidden partition in the free space of /dev/sdb
+which will use sectors: 128 to 2047 for the KeyFile and put a hidden partition in the free space of /dev/sdb - Please verify these sectors are empty before use as this has not been tested yet on multiple systems.
 
 ----
 
@@ -123,13 +123,13 @@ The following pip modules are required for use:
 You can get them by running `pip` like so:
 
 ```
-	sudo python3 -m pip install setuptools argon2 readchar xlib psutil pycrypto
+  sudo python3 -m pip install setuptools argon2 readchar xlib psutil pycrypto
 ```
 
 # Usage:
 
 ```
-	./keylocker.py <keyfile> <device_name> --options...
+  ./keylocker.py <keyfile> <device_name> --options...
 ```
 
 Get detailed help with: `./keylocker.py -h`
