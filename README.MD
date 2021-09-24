@@ -2,7 +2,7 @@
 
 KeyLocker allows your to store the keys to an unknowable number of hidden partitions on an unknowable number of drives with no way to know how many keys it contains.
 
-Without the password, the entire KeyLocker file appears as random data, but only after hashing your password through the memory expensive [Argon2 hashing algorithm](https://en.wikipedia.org/wiki/Argon2), can you recover one of these hidden keys. It does this by dividing a file (or hidden disk section) into a number of "shares." 
+Without the password, the entire KeyLocker file appears as random data, but only after hashing your password through the memory expensive [Argon2 hashing algorithm](https://en.wikipedia.org/wiki/Argon2), can you recover one of these hidden keys. It does this by dividing a file (or hidden disk section) into a number of "shares."
 
 By itself each share appears as random data, but by combining them with the [Shamir Secret Sharing](https://en.wikipedia.org/wiki/Shamir%27s_Secret_Sharing) method, and then decrypting it with the a key derived from your password, the data is revealed. This design means that that even if some of the shares are corrupted by other keys stored within the file, it will still be recoverable given that a certain minimum number is met.
 
@@ -15,7 +15,7 @@ However, uncovering one key tells you nothing about how many more keys are store
 #### Hashing:
 
   * [Argon2 key derivation](https://en.wikipedia.org/wiki/Argon2) – By using a large amount of memory to hash keys this algorithm provides maximum resistance to GPU cracking attacks. This makes it exponentially more difficult to hack shorter passwords.
-  * Passwords are never stored in strings, which would leave copies scattered across program memory. Only mutable type like Bytearrays are used to store sensitive data of each individual password keystroke. After creation, the password bytearray is hashed into Sha512() object and then instantly wiped with junk data. 
+  * Passwords are never stored in strings, which would leave copies scattered across program memory. Only mutable type like Bytearrays are used to store sensitive data of each individual password keystroke. After creation, the password bytearray is hashed into Sha512() object and then instantly wiped with junk data.
   * Mouse hashing – By hashing mouse movements with the existing random number generator, the quality of the random data is enhanced.
 
 #### KeyFile:
@@ -25,7 +25,7 @@ However, uncovering one key tells you nothing about how many more keys are store
   * Hidden KeyFile - Store the KeyFile in the slack space between partitions or use a normal file.
   * Store multiple text segments securely. Use it as a password manager or whatever you wish. For example you could copy paste the domain name after typing in your password to retrieve a seperate unique password for each website.
   * Random KeyFile – There’s no way to prove that the KeyFile is truly a KeyLocker generated file or just random noise.
-  * Built in [salt](https://en.wikipedia.org/wiki/Salt_(cryptography)) area at the beginning and end of each KeyFile. - SSDs don’t always delete every sector even if you try to directly overwrite the file. By hashing the SALT in with the password, it increases the chances that a deleted KeyFile will be truly irrecoverable. 
+  * Built in [salt](https://en.wikipedia.org/wiki/Salt_(cryptography)) area at the beginning and end of each KeyFile. - SSDs don’t always delete every sector even if you try to directly overwrite the file. By hashing the SALT in with the password, it increases the chances that a deleted KeyFile will be truly irrecoverable.
 
 #### Program Notes:
 
@@ -42,7 +42,7 @@ However, uncovering one key tells you nothing about how many more keys are store
 Let's say you have an existing encrypted /dev/mapper partition that you want to save the keys from:
 
 ```
-	sudo ./keylocker.py ~/testfile /dev/mapper/test
+  sudo ./keylocker.py ~/testfile /dev/mapper/test
 ```
 
 In write mode, the partition data and keys in this example are compressed from 112 bytes to 50 bytes plus a checksum so it fits neatly within a shingle share. Because KeyLocker is storing the partition boundaries, this does not have to be a defined partition in the MBR. It can be any hidden encrypted area anywhere on the disk.
@@ -66,13 +66,13 @@ In this example, 7 shamir shares are created, represented by their position in t
 Without arguments `--create` uses the entire drive:
 
 ```
-	sudo ./args.py ~/testfile /dev/sdb1 test --create
+  sudo ./args.py ~/testfile /dev/sdb1 test --create
 ```
 
 Let’s say you want to hide an encrypted partition within the last 2 gigabytes of a Fat32 or NTFS partition like so:
 
 ```
-	sudo ./keylocker.py ~/testfile /dev/sdb test --create='-2G 1M'
+  sudo ./keylocker.py ~/testfile /dev/sdb test --create='-2G 1M'
 ```
 
 which will create a a hidden encrypted area starting at 2 gigabytes before the end of the drive and use the remainder up until the last megabyte. The information for the partition boundaries are then stored withing a slot of the KeyFile that is encrypted with your password. This is of course a great way to lose data should someone start writing random files to said NTFS drive. Make backups!
@@ -83,7 +83,7 @@ which will create a a hidden encrypted area starting at 2 gigabytes before the e
 Let's say you have to free space at the end of the drive `/dev/sda` that you wish to convert into a hidden partition. To make sure the entire free space is used without overlap you can type:
 
 ```
-	sudo ./keylocker.py ~/testfile /dev/sdb --create='/dev/sdb1+1M'
+  sudo ./keylocker.py ~/testfile /dev/sdb --create='/dev/sdb1+1M'
 ```
 
 which will create a hidden partition starting at 1 megabyte after the end of /dev/sdb1 and ending 1 megabyte before the end of the drive.
@@ -93,13 +93,10 @@ which will create a hidden partition starting at 1 megabyte after the end of /de
 Finally to hide the KeyFile itself, you can embed it within the MBR partition table like so:
 
 ```
-	sudo ./keylocker.py /dev/sdb /dev/sdb --create='/dev/sdb1+1M -1M'
+  sudo ./keylocker.py /dev/sdb /dev/sdb --create='/dev/sdb1+1M -1M'
 ```
 
 which will use sectors: 128 to 2047 for the KeyFile and put a hidden partition in the free space of /dev/sdb
-
-
-Warning: No GPT compatability yet, so don’t try this on GPT disks!
 
 ----
 
@@ -109,9 +106,9 @@ To install pip and required python tools:
 
 
 ```
-	sudo apt update
-	sudo apt install python3-distutils python3-setuptools python3-dev gcc
-	pip3 --version || sudo python3 -m easy_install install pip
+  sudo apt update
+  sudo apt install python3-distutils python3-setuptools python3-dev gcc
+  pip3 --version || sudo python3 -m easy_install install pip
 
 ```
 
@@ -121,7 +118,7 @@ The following pip modules are required for use:
   * [Argon2](https://pypi.org/project/argon2/) - For memory intensive password hashing
   * [Psutil](https://pypi.org/project/psutil/) - To get system memory stats
   * [Crypto](https://pypi.org/project/crypto/) - To do the [AES encryption](https://en.wikipedia.org/wiki/Advanced_Encryption_Standard)
-  * [Xlib](https://pypi.org/project/xlib/) - To find the mouse pointer for hash_mouse.py (optional)
+  * [Xlib](https://pypi.org/project/xlib/) - (optional) To find the mouse pointer position for hash_mouse.py
 
 You can get them by running `pip` like so:
 
@@ -133,7 +130,6 @@ You can get them by running `pip` like so:
 
 ```
 	./keylocker.py <keyfile> <device_name> --options...
-
 ```
 
 Get detailed help with: `./keylocker.py -h`
@@ -146,7 +142,6 @@ Let me know if you would like to see a GUI version or any additional features re
 ### Todo:
 
  - [ ] GUI Interface
- - [ ] GPT Compatibility
  - [ ] Data storage area inside larger KeyFiles
  - [ ] Make it work with LUKS devices.
  - [ ] Windows Compatibility

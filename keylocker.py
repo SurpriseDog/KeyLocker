@@ -138,7 +138,7 @@ def openfile(filename):
 	if filename.startswith('/dev') and UA.mode == 'read':
 		safety_check()
 		warn("Are you sure you want to put the datafile in the free space of the MBR?")
-		warn("This is untested and will cause data destruction on GPT disks")
+		warn("This is untested on all systems and may damage your partition table")
 		if not query():
 			return False
 		file = system.open_slack(filename)

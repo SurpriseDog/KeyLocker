@@ -190,7 +190,7 @@ def linear_mapper(dev, offset, end):
 
 
 def open_slack(dev):
-	"Open slack space in drive, Future: detect gpt, check for overlaps with existing partitions"
+	"Open slack space in drive, Future: Check for overlaps with existing data"
 	start = 128			# randint(128, 400)
 	end = 2047 			# randint(2000, 2047) - start
 	sector = 512
@@ -199,7 +199,6 @@ def open_slack(dev):
 	#Overwrite any blank sections, ask if existing data found
 	clean = 0
 	dirty = 0
-
 	zero = b'\x00'* sector
 	while True:
 		data = mapper.read(sector)
@@ -210,6 +209,7 @@ def open_slack(dev):
 			mapper.write(get_random(sector))
 			clean += 1
 		if len(data) == sector and data != zero:
+			# Check if previous sectors were clean but this one is dirty
 			if dirty == 0 and clean > 0:
 				warn("Found existing data in slack, overwrite?")
 				if not query():
@@ -252,17 +252,17 @@ def sector_scanner(dev, start=0, end=0, sector=512, printme=True):
 	'''
 	dirty = False
 	zero = b'\x00'*sector
-
+#
 	def iprint(*args, **kargs):
 		if printme:
 			print(*args, **kargs)
-
+#
 	with open(dev, 'rb') as f:
 		f.seek(start*sector)
 		pos = f.tell() // sector
 		count = 0
 		column = max(len(str(end // sector)) + 1, 4)
-
+#
 		while pos < end or not end:
 			if not count % 64:
 				iprint("\n", str(pos).rjust(column), ' ', end='')
