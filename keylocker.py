@@ -135,13 +135,24 @@ def openfile(filename):
 	if UA.mode == 'write' and not canwrite:
 		error("Can not write to:", filename)
 
-	if filename.startswith('/dev') and UA.mode == 'read':
-		safety_check()
-		warn("Are you sure you want to put the datafile in the free space of the MBR?")
-		warn("This is untested on all systems and may damage your partition table")
-		if not query():
-			return False
-		file = system.open_slack(filename)
+
+	# Open slack space of device
+	if filename.startswith('/dev'):
+		dev = filename
+		start = 128
+		end = 2047
+		if UA.mode == 'write':
+			safety_check()
+			warn("Are you sure you want to put the datafile in the free space of the MBR?")
+			warn("This is untested on all systems and may damage your partition table")
+			if system.sector_scanner(dev, start, end, printme=False):
+				system.sector_scanner(dev, start, end)
+				warn("Found data in sectors", start, 'to', end)
+				if not query():
+					return False
+			else:
+				query()
+		file = system.open_slack(dev, start, end)
 	else:
 		if canwrite:
 			file = open(filename, 'r+b')
@@ -183,8 +194,8 @@ def main(salt):
 
 
 	if devname:
+		print("Hashing serial number of", devname)
 		salt.update(system.get_serial(devname).encode())
-		warn("Hashing", devname)
 	file = openfile(datafile_name)
 	if not file:
 		return False

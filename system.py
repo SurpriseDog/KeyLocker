@@ -189,11 +189,8 @@ def linear_mapper(dev, offset, end):
 	return os.path.join('/dev/mapper', name)
 
 
-def open_slack(dev):
+def open_slack(dev, start, end, sector=512):
 	"Open slack space in drive, Future: Check for overlaps with existing data"
-	start = 128			# randint(128, 400)
-	end = 2047 			# randint(2000, 2047) - start
-	sector = 512
 	mapper = bitfun.FileMapper(dev, (start * sector, end * sector))
 
 	#Overwrite any blank sections, ask if existing data found
@@ -213,6 +210,7 @@ def open_slack(dev):
 			if dirty == 0 and clean > 0:
 				warn("Found existing data in slack, overwrite?")
 				if not query():
+					mapper.close()
 					sys.exit(1)
 				dirty += 1
 
@@ -280,6 +278,7 @@ def sector_scanner(dev, start=0, end=0, sector=512, printme=True):
 			else:
 				pos = tell
 				count += 1
+		iprint('\n')
 		return dirty
 
 def junk_dir(directory, size=1024**2, max_t=6):

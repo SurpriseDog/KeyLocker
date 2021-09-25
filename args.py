@@ -223,10 +223,7 @@ def get_mode(ua):
 	else:
 		mode = 'write'
 
-	if 'mapper' in ua.devname:
-		mode = 'write'
-
-	if not os.path.exists(ua.datafile_name):
+	if ua.mapper_name:
 		mode = 'write'
 
 	if ua.create_mapper:
