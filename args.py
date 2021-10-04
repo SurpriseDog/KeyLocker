@@ -6,7 +6,7 @@ import system
 import shared
 
 
-import sd.arg_master as arg_master
+import sd.easy_args as easy_args
 
 from sd.common import is_num, uerror as error, get_blocksize, bisect_small, round_up, round_down
 from sd.common import warn, rfs, strip_punct, sort_dict, ConvertDataSize, mrfs, query, randint
@@ -21,7 +21,7 @@ DEFAULT_MEM = 3 * 1024**3
 # https://www.memorybenchmark.net/amount-of-ram-installed.html
 
 def parse_args():
-	am = arg_master.ArgMaster(usage="./keylocker.py <keyfile> <device_name> --options...",
+	am = easy_args.ArgMaster(usage="./keylocker.py <keyfile> <device_name> --options...",
 	                          newline='\n'*2, verbose=False)
 
 	pos_args = [\
@@ -308,7 +308,7 @@ def get_args(testing=False):
 
 	# Show the arguments:
 	if ua.verbose >= 2:
-		arg_master.show_args(ua)
+		easy_args.show_args(ua)
 
 
 	#Determine program mode:
@@ -324,7 +324,6 @@ def get_args(testing=False):
 
 	blocksize = None
 	#Parse create_mapper_args
-	print('ua.create_mapper', ua.create_mapper)
 	if ua.create_mapper == []:
 		ua.create_mapper = '0'
 
@@ -359,7 +358,7 @@ def get_args(testing=False):
 
 def _tester():
 	ua = get_args(testing=True)
-	arg_master.show_args(ua)
+	easy_args.show_args(ua)
 
 
 if __name__ == "__main__":
