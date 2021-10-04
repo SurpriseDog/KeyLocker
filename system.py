@@ -281,6 +281,7 @@ def sector_scanner(dev, start=0, end=0, sector=512, printme=True):
 		iprint('\n')
 		return dirty
 
+
 def junk_dir(directory, size=1024**2, max_t=6):
 	'''
 	Fill a directory with junk files, sync and then delete them

@@ -5,8 +5,8 @@ import sys
 import system
 import shared
 
-from sd.columns import auto_cols
-from sd.arg_master import ArgMaster
+
+import sd.arg_master as arg_master
 
 from sd.common import is_num, uerror as error, get_blocksize, bisect_small, round_up, round_down
 from sd.common import warn, rfs, strip_punct, sort_dict, ConvertDataSize, mrfs, query, randint
@@ -21,8 +21,8 @@ DEFAULT_MEM = 3 * 1024**3
 # https://www.memorybenchmark.net/amount-of-ram-installed.html
 
 def parse_args():
-	am = ArgMaster(usage="./keylocker.py <keyfile> <device_name> --options...",
-	               newline='\n'*2, verbose=False)
+	am = arg_master.ArgMaster(usage="./keylocker.py <keyfile> <device_name> --options...",
+	                          newline='\n'*2, verbose=False)
 
 	pos_args = [\
 		['datafile_name'],
@@ -216,27 +216,7 @@ def process_mapper_args(args, blocksize):
 	return offset, end - offset
 
 
-def get_mode(ua):
-	"Guess program mode, read or write to datafile"
-	if ua.devname:
-		mode = 'read'
-	else:
-		mode = 'write'
-
-	if ua.mapper_name:
-		mode = 'write'
-
-	if ua.create_mapper:
-		mode = 'write'
-
-	if mode == 'read':
-		print("Assuming mode: read from datafile")
-	else:
-		print("Assuming mode: write to datafile")
-	return mode
-
-
-def calc_mem(gigs, verbose=1):
+def calc_mem(gigs):
 
 	minimum = 1024**2
 	# User specified number:
@@ -279,6 +259,35 @@ def calc_mem(gigs, verbose=1):
 	return mem
 	'''
 
+def get_mode(user_args):
+	ua = user_args
+
+	if ua.read and not ua.write:
+		return 'read'
+	if ua.write and not ua.read:
+		return 'write'
+	if ua.read and ua.write:
+		error("You must select only to read or write from datafile")
+
+	# Otherwise guess program mode, read or write to datafile
+	if ua.devname:
+		mode = 'read'
+	else:
+		mode = 'write'
+
+	if ua.mapper_name:
+		mode = 'write'
+
+	if ua.create_mapper:
+		mode = 'write'
+
+	if mode == 'read':
+		print("Assuming mode: read from datafile")
+	else:
+		print("Assuming mode: write to datafile")
+	return mode
+
+
 
 def get_args(testing=False):
 	"Get user args and do some processing to make sure everything is okay"
@@ -299,18 +308,11 @@ def get_args(testing=False):
 
 	# Show the arguments:
 	if ua.verbose >= 2:
-		show_args(ua)
+		arg_master.show_args(ua)
 
 
 	#Determine program mode:
-	if ua.read and not ua.write:
-		ua.mode = 'read'
-	if ua.write and not ua.read:
-		ua.mode = 'write'
-	if ua.read and ua.write:
-		error("You must select only to read or write from datafile")
-	if not ua.read and not ua.write:
-		ua.mode = get_mode(ua)
+	ua.mode = get_mode(ua)
 
 	#If datafile is a folder, put a file in that folder.
 	if os.path.isdir(ua.datafile_name):
@@ -352,14 +354,12 @@ def get_args(testing=False):
 	return ua
 
 
-def show_args(uargs):
-	auto_cols(sorted([[key, repr(val)] for key, val in (vars(uargs)).items()]))
-	print()
+
 
 
 def _tester():
 	ua = get_args(testing=True)
-	show_args(ua)
+	arg_master.show_args(ua)
 
 
 if __name__ == "__main__":

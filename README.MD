@@ -117,7 +117,7 @@ The following pip modules are required for use:
   * [Readchar](https://pypi.org/project/readchar/) - Password entry
   * [Argon2](https://pypi.org/project/argon2/) - Memory intensive password hashing
   * [Psutil](https://pypi.org/project/psutil/) - System memory stats
-  * [Crypto](https://pypi.org/project/crypto/) - [AES encryption](https://en.wikipedia.org/wiki/Advanced_Encryption_Standard)
+  * [Crypto](https://pypi.org/project/crypto/) - AES encryption and decryption
   * [Xlib](https://pypi.org/project/xlib/) - (optional) Find the mouse pointer position for hash_mouse.py
 
 You can get them by running `pip` like so:
