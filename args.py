@@ -22,7 +22,7 @@ DEFAULT_MEM = 3 * 1024**3
 
 def parse_args():
 	am = easy_args.ArgMaster(usage="./keylocker.py <keyfile> <device_name> --options...",
-	                          newline='\n'*2, verbose=False)
+	                         newline='\n'*2, verbose=False)
 
 	pos_args = [\
 		['datafile_name'],
@@ -102,6 +102,9 @@ def parse_args():
 		'''Argon2 hash memory in GiB.
 		For computers with less than 4GB, half the ram will be used.
 		Default: '''+ mrfs(DEFAULT_MEM),
+
+		("high", "high_mem", bool),
+		"Use a higher mem preset (Will be default in later release.)",
 
 		#("target", "target_hash_time", float, 4),
 		#"Adjust the hash time to try and hit this number in seconds",
@@ -321,6 +324,10 @@ def get_args(testing=False):
 	#convert memory
 	ua.hash_mem = calc_mem(ua.hash_mem)
 
+	#High preset
+	if ua.high_mem:
+		ua.hash_mem = 6 * 1024**3
+		ua.hash_rounds = 3
 
 	blocksize = None
 	#Parse create_mapper_args
